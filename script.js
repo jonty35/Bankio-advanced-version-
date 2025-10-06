@@ -5,13 +5,6 @@ const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const scrollbtn = document.querySelector(" .btn--scroll-to");
 const blurimg = document.querySelectorAll(".lazy-img");
-const toTop = document.querySelector(".totop");
-const navLinks = document.querySelector(".nav__links");
-const navLink = document.querySelector(".nav__link");
-const tabs = document.querySelector(".operations__tab-container");
-const opContent = document.querySelectorAll(".operations__content");
-const opTab = document.querySelectorAll(".operations__tab");
-
 
 
 
