@@ -5,6 +5,13 @@ const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const scrollbtn = document.querySelector(" .btn--scroll-to");
 const blurimg = document.querySelectorAll(".lazy-img");
+const toTop = document.querySelector(".totop");
+const navLinks = document.querySelector(".nav__links");
+const tabs = document.querySelector(".operations__tab-container");
+const opTab = document.querySelectorAll(".operations__tab ");
+const opContent = document.querySelectorAll(".operations__content ");
+const nav = document.querySelector(".nav");
+const section1 = document.querySelector("#section--1");
 
 
 
@@ -82,4 +89,62 @@ tabs.addEventListener("click", function(e){
 
     document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add("operations__content--active");
  
+})
+
+function overOp(e)
+{
+     if(e.target.classList.contains("nav__link")) 
+    {
+        const link =e.target;
+
+        const sibling = link.closest(".nav").querySelectorAll('.nav__link');
+
+        const logo =link.closest(".nav").querySelector("img");
+        
+        sibling.forEach(el => {
+            if(el !== link) el.style.opacity = this;
+
+        });
+
+        logo.style.opacity = this;
+    }
+
+}
+
+nav.addEventListener("mouseover", overOp.bind(0.5));
+nav.addEventListener("mouseout", overOp.bind(1));
+
+const initialscroll = section1.getBoundingClientRect();
+console.log(initialscroll);
+
+window.addEventListener("scroll", function(){
+
+    if(this.window.scrollY > initialscroll.top)
+        nav.classList.add("sticky");
+    else 
+        nav.classList.remove("sticky");
+});
+
+const allsections = document.querySelectorAll(".section");
+
+function revealSection(enteries, observer)
+{
+    enteries.forEach(entry => {
+
+    if(!entry.isIntersecting) return;
+
+    entry.target.classList.remove("section--hidden");
+
+    observer.unobserve(entry.target);
+
+    })
+   
+}
+
+const obs = new IntersectionObserver(revealSection, {root: null, threshold: 0.15,});
+
+allsections.forEach(function(section){
+
+    obs.observe(section);
+    section.classList.add("section--hidden");
 })
