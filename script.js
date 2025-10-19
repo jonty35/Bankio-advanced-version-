@@ -147,4 +147,51 @@ allsections.forEach(function(section){
 
     obs.observe(section);
     section.classList.add("section--hidden");
-})
+});
+
+const slide = document.querySelectorAll(".slide");
+
+let currentSlide = 0;
+let maxLen = slide.length;
+
+function goToSlides(slides)
+{
+    slide.forEach((s, i ) => {
+        s.style.transform = `translateX(${100 * (i - slides)}%)`;
+    });
+};
+goToSlides(0);
+
+function nextSlide()
+{
+    if(currentSlide === maxLen - 1)
+    {
+        currentSlide = 0;
+    }
+    else
+    {
+        currentSlide++;
+    }
+
+    goToSlides(currentSlide);
+}
+
+function preSlide()
+{
+    if(currentSlide === 0)
+    {
+        currentSlide = maxLen - 1;
+    }
+    else
+    {
+      currentSlide--;
+    }
+
+    goToSlides(currentSlide);
+}
+
+const nextBtn = document.querySelector(" .slider__btn--right");
+const preBtn = document.querySelector(".slider__btn--left");
+
+nextBtn.addEventListener("click", nextSlide);
+preBtn.addEventListener("click", preSlide);
