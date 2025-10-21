@@ -12,20 +12,22 @@ const opTab = document.querySelectorAll(".operations__tab ");
 const opContent = document.querySelectorAll(".operations__content ");
 const nav = document.querySelector(".nav");
 const section1 = document.querySelector("#section--1");
+const slide = document.querySelectorAll(".slide");
+const nextBtn = document.querySelector(" .slider__btn--right");
+const preBtn = document.querySelector(".slider__btn--left");
 
 
 
 
-function showModal(e)
-{
+
+function showModal(e) {
     e.preventDefault();
 
     modal.classList.remove("hidden");
     overlay.classList.remove("hidden");
 }
 
-function closeModal()
-{
+function closeModal() {
     modal.classList.add("hidden");
     overlay.classList.add("hidden");
 }
@@ -35,16 +37,14 @@ btnShowmodal.forEach(btn => btn.addEventListener("click", showModal));
 btnClosemodal.addEventListener("click", closeModal);
 
 
-scrollbtn.addEventListener("click", function()
-{ 
+scrollbtn.addEventListener("click", function () {
     const section1 = document.querySelector("#section--1");
 
-    section1.scrollIntoView({behavior : "smooth"});
+    section1.scrollIntoView({ behavior: "smooth" });
 });
 
 
-blurimg.forEach(img => img.addEventListener("mouseover", function(e)
-{
+blurimg.forEach(img => img.addEventListener("mouseover", function (e) {
 
     e.currentTarget.style.filter = "blur(0px)";
     const i = e.currentTarget.getAttribute("data-src");
@@ -53,33 +53,31 @@ blurimg.forEach(img => img.addEventListener("mouseover", function(e)
 }));
 
 
-toTop.addEventListener("click", function()
-{
+toTop.addEventListener("click", function () {
     const header = document.querySelector(".header");
 
-    header.scrollIntoView({behavior : "smooth"});
+    header.scrollIntoView({ behavior: "smooth" });
 })
 
 
-navLinks.addEventListener("click", function(e){
+navLinks.addEventListener("click", function (e) {
 
     e.preventDefault();
 
     const id = e.target.getAttribute("href");
-   
-    if(e.target.classList.contains("nav__link"))
-    {
-        document.querySelector(id).scrollIntoView({behavior : "smooth"});
+
+    if (e.target.classList.contains("nav__link")) {
+        document.querySelector(id).scrollIntoView({ behavior: "smooth" });
     }
 
 });
 
 
-tabs.addEventListener("click", function(e){
+tabs.addEventListener("click", function (e) {
 
     const clicked = e.target.closest(".operations__tab");
 
-    if(!clicked) return ;
+    if (!clicked) return;
 
     opTab.forEach(tab => tab.classList.remove("operations__tab--active"));
 
@@ -88,21 +86,19 @@ tabs.addEventListener("click", function(e){
     opContent.forEach(con => con.classList.remove("operations__content--active"));
 
     document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add("operations__content--active");
- 
+
 })
 
-function overOp(e)
-{
-     if(e.target.classList.contains("nav__link")) 
-    {
-        const link =e.target;
+function overOp(e) {
+    if (e.target.classList.contains("nav__link")) {
+        const link = e.target;
 
         const sibling = link.closest(".nav").querySelectorAll('.nav__link');
 
-        const logo =link.closest(".nav").querySelector("img");
-        
+        const logo = link.closest(".nav").querySelector("img");
+
         sibling.forEach(el => {
-            if(el !== link) el.style.opacity = this;
+            if (el !== link) el.style.opacity = this;
 
         });
 
@@ -117,81 +113,102 @@ nav.addEventListener("mouseout", overOp.bind(1));
 const initialscroll = section1.getBoundingClientRect();
 console.log(initialscroll);
 
-window.addEventListener("scroll", function(){
+window.addEventListener("scroll", function () {
 
-    if(this.window.scrollY > initialscroll.top)
+    if (this.window.scrollY > initialscroll.top)
         nav.classList.add("sticky");
-    else 
+    else
         nav.classList.remove("sticky");
 });
 
 const allsections = document.querySelectorAll(".section");
 
-function revealSection(enteries, observer)
-{
+function revealSection(enteries, observer) {
     enteries.forEach(entry => {
 
-    if(!entry.isIntersecting) return;
+        if (!entry.isIntersecting) return;
 
-    entry.target.classList.remove("section--hidden");
+        entry.target.classList.remove("section--hidden");
 
-    observer.unobserve(entry.target);
+        observer.unobserve(entry.target);
 
     })
-   
+
 }
 
-const obs = new IntersectionObserver(revealSection, {root: null, threshold: 0.15,});
+const obs = new IntersectionObserver(revealSection, { root: null, threshold: 0.15, });
 
-allsections.forEach(function(section){
+allsections.forEach(function (section) {
 
     obs.observe(section);
     section.classList.add("section--hidden");
 });
 
-const slide = document.querySelectorAll(".slide");
 
 let currentSlide = 0;
 let maxLen = slide.length;
 
-function goToSlides(slides)
-{
-    slide.forEach((s, i ) => {
+function goToSlides(slides) {
+    slide.forEach((s, i) => {
         s.style.transform = `translateX(${100 * (i - slides)}%)`;
     });
 };
-goToSlides(0);
 
-function nextSlide()
-{
-    if(currentSlide === maxLen - 1)
-    {
+goToSlides(0);
+activeDot(0);
+
+function nextSlide() {
+    if (currentSlide === maxLen - 1) {
         currentSlide = 0;
     }
-    else
-    {
+    else {
         currentSlide++;
     }
 
     goToSlides(currentSlide);
+    activeDot(currentSlide);
 }
 
-function preSlide()
-{
-    if(currentSlide === 0)
-    {
+function preSlide() {
+    if (currentSlide === 0) {
         currentSlide = maxLen - 1;
     }
-    else
-    {
-      currentSlide--;
+    else {
+        currentSlide--;
     }
 
     goToSlides(currentSlide);
-}
+    activeDot(currentSlide);
 
-const nextBtn = document.querySelector(" .slider__btn--right");
-const preBtn = document.querySelector(".slider__btn--left");
+}
 
 nextBtn.addEventListener("click", nextSlide);
 preBtn.addEventListener("click", preSlide);
+
+const dots = document.querySelector(".dots");
+
+function activeDot(slide)
+{
+    document.querySelectorAll(".dots__dot").forEach(dot => dot.classList.remove("dots__dot--active"));
+    
+    document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add("dots__dot--active");
+
+}
+
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "ArrowLeft") preSlide();
+    if(e.key === "ArrowRight") nextSlide();
+});
+
+dots.addEventListener("click", function(e){
+
+   if(e.target.classList.contains("dots__dot"))
+    {
+        currentSlide = Number (e.target.dataset.slide);
+        console.log(currentSlide);
+        goToSlides(currentSlide);
+        activeDot(currentSlide);
+    }
+    
+});
